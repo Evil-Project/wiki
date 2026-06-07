@@ -1,0 +1,518 @@
+:root {
+  color-scheme: light;
+  --ink: #211f1a;
+  --muted: #686257;
+  --paper: #f7f1e4;
+  --sheet: #fffaf0;
+  --edge: #d9cfbd;
+  --teal: #0e7772;
+  --teal-dark: #07524f;
+  --red: #be3d2d;
+  --brass: #a8742a;
+  --blue: #315d8c;
+  --shadow: 0 24px 60px rgba(42, 35, 24, 0.14);
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    linear-gradient(90deg, rgba(33, 31, 26, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(33, 31, 26, 0.035) 1px, transparent 1px), var(--paper);
+  background-size: 32px 32px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+.wiki-shell {
+  display: grid;
+  grid-template-columns: 256px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.side-rail {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  height: 100vh;
+  padding: 28px 18px;
+  border-right: 1px solid var(--edge);
+  background: rgba(255, 250, 240, 0.82);
+  backdrop-filter: blur(18px);
+}
+
+.brand-lockup {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid #2e2921;
+  background: var(--ink);
+  color: #fff7e8;
+  box-shadow: 4px 4px 0 var(--brass);
+}
+
+.brand-lockup strong {
+  display: block;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.brand-lockup small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.section-nav {
+  display: grid;
+  gap: 8px;
+}
+
+.section-nav a {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.section-nav a:hover,
+.section-nav a:focus-visible {
+  border-color: var(--edge);
+  background: #fff8e8;
+  color: var(--ink);
+  outline: none;
+}
+
+.page-column {
+  min-width: 0;
+  padding: 28px clamp(18px, 4vw, 56px) 56px;
+}
+
+.wiki-hero {
+  position: relative;
+  display: grid;
+  min-height: min(520px, 64vh);
+  overflow: hidden;
+  border: 1px solid #2d2a24;
+  background: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.wiki-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wiki-hero::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(25, 22, 17, 0.88) 0%, rgba(25, 22, 17, 0.58) 38%, rgba(25, 22, 17, 0.16) 72%),
+    linear-gradient(0deg, rgba(25, 22, 17, 0.38), transparent 48%);
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  min-width: 0;
+  max-width: 720px;
+  padding: clamp(28px, 6vw, 72px);
+  color: #fff8ea;
+}
+
+.kicker {
+  width: fit-content;
+  margin: 0 0 18px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 248, 234, 0.42);
+  background: rgba(7, 82, 79, 0.42);
+  color: #f8dfb3;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.hero-copy h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  font-size: clamp(4.2rem, 10vw, 9.2rem);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: 0;
+}
+
+.hero-copy p:last-child {
+  max-width: 590px;
+  margin: 24px 0 0;
+  color: rgba(255, 248, 234, 0.88);
+  font-size: clamp(1.03rem, 1.6vw, 1.25rem);
+  line-height: 1.65;
+}
+
+.hero-meta {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.hero-meta span {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  min-height: 34px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 248, 234, 0.26);
+  background: rgba(33, 31, 26, 0.72);
+  color: #fff8ea;
+}
+
+.top-strip {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  margin: 22px 0;
+}
+
+.search-box,
+.freshness {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  border: 1px solid var(--edge);
+  background: rgba(255, 250, 240, 0.88);
+  color: var(--muted);
+}
+
+.search-box {
+  gap: 10px;
+  padding: 0 14px;
+}
+
+.search-box input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.search-box input::placeholder {
+  color: #8b8274;
+}
+
+.freshness {
+  gap: 8px;
+  justify-content: center;
+  padding: 0 16px;
+  white-space: nowrap;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 22px;
+  align-items: start;
+}
+
+.article-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.wiki-section {
+  scroll-margin-top: 24px;
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--edge);
+  background: rgba(255, 250, 240, 0.94);
+  box-shadow: 0 8px 30px rgba(42, 35, 24, 0.07);
+}
+
+.section-heading {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 14px;
+  align-items: center;
+}
+
+.section-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid #2d2a24;
+  background: #f0e2c8;
+  color: var(--teal-dark);
+}
+
+.section-heading p {
+  margin: 0 0 4px;
+  color: var(--red);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.05;
+}
+
+.section-body {
+  max-width: 78ch;
+  margin: 22px 0 0;
+  color: #3c372f;
+  font-size: 1.05rem;
+  line-height: 1.78;
+}
+
+.note-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 24px 0 0;
+  list-style: none;
+}
+
+.note-list li {
+  min-height: 32px;
+  padding: 7px 10px;
+  border: 1px solid rgba(14, 119, 114, 0.34);
+  background: rgba(14, 119, 114, 0.08);
+  color: var(--teal-dark);
+  font-size: 0.9rem;
+}
+
+.context-panel {
+  position: sticky;
+  top: 22px;
+  display: grid;
+  gap: 16px;
+}
+
+.context-panel section {
+  border: 1px solid var(--edge);
+  background: #fffaf0;
+}
+
+.context-panel h2 {
+  margin: 0;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--edge);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  font-size: 1.25rem;
+}
+
+.context-panel ol {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  margin: 0;
+  list-style-position: inside;
+}
+
+.context-panel li {
+  color: var(--muted);
+}
+
+.context-panel a {
+  display: inline-block;
+  padding: 8px 4px;
+  color: var(--teal-dark);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.context-panel dl {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.context-panel dl div {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.context-panel dl div:last-child {
+  border-bottom: 0;
+}
+
+.context-panel dt {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.context-panel dd {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 980px) {
+  .wiki-shell {
+    display: block;
+  }
+
+  .side-rail {
+    position: static;
+    height: auto;
+    padding: 14px;
+    border-right: 0;
+    border-bottom: 1px solid var(--edge);
+  }
+
+  .section-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+
+  .section-nav a {
+    grid-template-columns: 20px max-content;
+    flex: 0 0 auto;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .context-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 680px) {
+  .page-column {
+    padding: 14px 14px 36px;
+  }
+
+  .side-rail {
+    gap: 20px;
+  }
+
+  .section-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .section-nav a {
+    grid-template-columns: 20px minmax(0, 1fr);
+  }
+
+  .section-nav span {
+    min-width: 0;
+  }
+
+  .wiki-hero {
+    min-height: 480px;
+  }
+
+  .wiki-hero::after {
+    background: linear-gradient(0deg, rgba(25, 22, 17, 0.86), rgba(25, 22, 17, 0.3));
+  }
+
+  .hero-copy {
+    width: 100%;
+    max-width: 100%;
+    padding: 24px;
+  }
+
+  .hero-copy h1 {
+    max-width: 100%;
+    font-size: clamp(2.7rem, 12vw, 3.5rem);
+    line-height: 0.96;
+  }
+
+  .hero-copy p:last-child {
+    max-width: min(28ch, 100%);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .hero-meta {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    align-self: start;
+    justify-self: start;
+    margin: 0 24px 24px;
+  }
+
+  .top-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .freshness {
+    justify-content: flex-start;
+  }
+
+  .section-heading {
+    grid-template-columns: 42px 1fr;
+  }
+
+  .section-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .note-list {
+    display: grid;
+  }
+}
