@@ -1,9 +1,11 @@
 import {
+  canonicalPageSlug,
   createPageSnapshot,
   slugifyTitle,
   summarizeSearch,
   titleFromSlug,
 } from "../shared/wiki-utils";
+import { createSeedData, wikiSeedVersion } from "../data/seed";
 import type { KVNamespace, R2Bucket } from "@cloudflare/workers-types";
 import type {
   WikiCategorySummary,
@@ -15,6 +17,9 @@ import type {
 } from "../shared/wiki-types";
 
 interface Env {
+  ASSETS?: {
+    fetch(request: Request | URL | string): Promise<Response>;
+  };
   WIKI_KV: KVNamespace;
   WIKI_FILES?: R2Bucket;
   EDIT_TOKEN?: string;
@@ -23,6 +28,7 @@ interface Env {
 const pagePrefix = "page:";
 const revisionPrefix = "revision:";
 const filePrefix = "file:";
+const seedMetaKey = "meta:seed-version";
 
 function json(data: unknown, init: ResponseInit = {}): Response {
   return new Response(JSON.stringify(data), {
@@ -83,27 +89,67 @@ async function listValues<T>(kv: KVNamespace, prefix: string): Promise<T[]> {
   return values;
 }
 
+async function ensureSeeded(env: Env): Promise<void> {
+  const seedMeta = await readJson<{ value: number }>(env.WIKI_KV, seedMetaKey);
+
+  if (seedMeta?.value === wikiSeedVersion) {
+    return;
+  }
+
+  const { pages, revisions } = createSeedData();
+
+  for (const page of pages) {
+    const key = `${pagePrefix}${page.slug}`;
+    const existing = await readJson<WikiPage>(env.WIKI_KV, key);
+
+    if (!existing) {
+      await writeJson(env.WIKI_KV, key, page);
+    }
+  }
+
+  for (const revision of revisions) {
+    const key = `${revisionPrefix}${revision.pageSlug}:${revision.id}`;
+    const existing = await readJson<WikiRevision>(env.WIKI_KV, key);
+
+    if (!existing) {
+      await writeJson(env.WIKI_KV, key, revision);
+    }
+  }
+
+  await writeJson(env.WIKI_KV, seedMetaKey, {
+    value: wikiSeedVersion,
+    updatedAt: new Date().toISOString(),
+  });
+}
+
 function visiblePages(pages: WikiPage[]): WikiPage[] {
   return pages.filter((page) => !page.deletedAt);
 }
 
 async function getPage(env: Env, slug: string): Promise<WikiPage | null> {
-  const page = await readJson<WikiPage>(env.WIKI_KV, `${pagePrefix}${slug}`);
+  await ensureSeeded(env);
+
+  const page = await readJson<WikiPage>(env.WIKI_KV, `${pagePrefix}${canonicalPageSlug(slug)}`);
 
   return page && !page.deletedAt ? page : null;
 }
 
 async function listPages(env: Env): Promise<WikiPage[]> {
+  await ensureSeeded(env);
+
   const pages = await listValues<WikiPage>(env.WIKI_KV, pagePrefix);
 
   return visiblePages(pages).sort((left, right) => left.title.localeCompare(right.title));
 }
 
 async function savePage(env: Env, input: WikiPageInput, slug = slugifyTitle(input.title)): Promise<WikiPage> {
-  const previous = await readJson<WikiPage>(env.WIKI_KV, `${pagePrefix}${slug}`);
+  await ensureSeeded(env);
+
+  const pageSlug = canonicalPageSlug(slug);
+  const previous = await readJson<WikiPage>(env.WIKI_KV, `${pagePrefix}${pageSlug}`);
   const { page, revision } = createPageSnapshot({
-    slug,
-    title: input.title || titleFromSlug(slug),
+    slug: pageSlug,
+    title: input.title || titleFromSlug(pageSlug),
     content: input.content,
     categories: input.categories,
     tags: input.tags,
@@ -112,20 +158,21 @@ async function savePage(env: Env, input: WikiPageInput, slug = slugifyTitle(inpu
     previous: previous ?? undefined,
   });
 
-  await writeJson(env.WIKI_KV, `${pagePrefix}${slug}`, page);
-  await writeJson(env.WIKI_KV, `${revisionPrefix}${slug}:${revision.id}`, revision);
+  await writeJson(env.WIKI_KV, `${pagePrefix}${pageSlug}`, page);
+  await writeJson(env.WIKI_KV, `${revisionPrefix}${pageSlug}:${revision.id}`, revision);
 
   return page;
 }
 
 async function deletePage(env: Env, slug: string): Promise<Response> {
-  const page = await getPage(env, slug);
+  const pageSlug = canonicalPageSlug(slug);
+  const page = await getPage(env, pageSlug);
 
   if (!page) {
     return notFound("Page not found");
   }
 
-  await writeJson(env.WIKI_KV, `${pagePrefix}${slug}`, {
+  await writeJson(env.WIKI_KV, `${pagePrefix}${pageSlug}`, {
     ...page,
     deletedAt: new Date().toISOString(),
   });
@@ -134,12 +181,17 @@ async function deletePage(env: Env, slug: string): Promise<Response> {
 }
 
 async function listRevisions(env: Env, slug: string): Promise<WikiRevision[]> {
-  const revisions = await listValues<WikiRevision>(env.WIKI_KV, `${revisionPrefix}${slug}:`);
+  await ensureSeeded(env);
+
+  const pageSlug = canonicalPageSlug(slug);
+  const revisions = await listValues<WikiRevision>(env.WIKI_KV, `${revisionPrefix}${pageSlug}:`);
 
   return revisions.sort((left, right) => right.createdAt.localeCompare(left.createdAt));
 }
 
 async function handleFiles(request: Request, env: Env, parts: string[]): Promise<Response> {
+  await ensureSeeded(env);
+
   if (request.method === "GET" && parts.length === 1) {
     const files = await listValues<WikiFile>(env.WIKI_KV, filePrefix);
 
@@ -232,10 +284,16 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
   const parts = url.pathname.split("/").filter(Boolean);
 
   if (url.pathname === "/api/health") {
+    await ensureSeeded(env);
+
     return json({ ok: true, storage: "cloudflare-kv" });
   }
 
   if (parts[0] !== "api") {
+    if (env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+
     return notFound("API route not found");
   }
 
@@ -258,7 +316,7 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
   }
 
   if (parts[1] === "pages" && parts[2]) {
-    const slug = parts[2];
+    const slug = canonicalPageSlug(parts[2]);
 
     if (request.method === "GET" && parts.length === 3) {
       const page = await getPage(env, slug);
@@ -309,7 +367,9 @@ async function handleRequest(request: Request, env: Env): Promise<Response> {
     })).sort((left, right) => left.name.localeCompare(right.name));
 
     if (parts[2]) {
-      return json(pages.filter((page) => page.categories.includes(parts[2])));
+      const category = decodeURIComponent(parts[2]);
+
+      return json(pages.filter((page) => page.categories.includes(category)));
     }
 
     return json(categories);

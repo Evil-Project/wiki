@@ -60,11 +60,16 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
 a {
+  color: inherit;
+}
+
+button {
   color: inherit;
 }
 
@@ -238,6 +243,55 @@ a {
   outline-offset: 3px;
 }
 
+.rail-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.rail-search,
+.token-box {
+  display: grid;
+  gap: 8px;
+}
+
+.rail-search {
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: center;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 2px dashed rgba(250, 158, 188, 0.36);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.rail-search input,
+.token-box input,
+.editor-form input,
+.search-page-form input,
+.file-form input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.token-box {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.token-box span {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 :root[data-theme="dark"] .theme-toggle {
   background: linear-gradient(135deg, rgba(255, 159, 196, 0.18), rgba(0, 240, 255, 0.12));
   border-color: rgba(255, 255, 255, 0.18);
@@ -400,47 +454,36 @@ a {
   margin: 22px 0;
 }
 
-.search-box,
-.freshness {
-  display: flex;
-  align-items: center;
-  min-height: 48px;
-  border: 2px dashed rgba(250, 158, 188, 0.42);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--muted);
-  backdrop-filter: blur(6px);
-}
-
-:root[data-theme="dark"] .search-box,
-:root[data-theme="dark"] .freshness {
-  background: rgba(23, 17, 42, 0.76);
-  border-color: rgba(0, 240, 255, 0.28);
-}
-
-.search-box {
-  gap: 10px;
-  padding: 0 14px;
-}
-
-.search-box input {
-  width: 100%;
-  min-width: 0;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: var(--ink);
-}
-
-.search-box input::placeholder {
-  color: #8b8274;
-}
-
-.freshness {
+.command-pill,
+.danger-pill {
+  display: inline-flex;
   gap: 8px;
+  align-items: center;
   justify-content: center;
-  padding: 0 16px;
-  white-space: nowrap;
+  min-height: 40px;
+  width: fit-content;
+  padding: 9px 14px;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e5ec 100%);
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 4px 4px 10px rgba(93, 122, 138, 0.1);
+  cursor: pointer;
+}
+
+.command-pill:hover,
+.command-pill:focus-visible,
+.danger-pill:hover,
+.danger-pill:focus-visible {
+  background: linear-gradient(135deg, #ffffff 0%, var(--pink) 100%);
+  outline: 2px solid rgba(250, 158, 188, 0.3);
+  outline-offset: 3px;
+}
+
+.danger-pill {
+  color: #b4234a;
 }
 
 .content-grid {
@@ -602,6 +645,269 @@ a {
   line-height: 1.55;
 }
 
+.page-title-row {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.page-title-row h1,
+.wiki-section h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: 0;
+  text-shadow: 3px 3px 0 rgba(255, 255, 255, 0.72);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--pink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.page-actions,
+.form-grid,
+.file-form,
+.search-page-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.article-page {
+  min-height: 72vh;
+}
+
+.wiki-renderer {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.wiki-renderer h2,
+.wiki-renderer h3 {
+  color: var(--ink);
+  line-height: 1.12;
+}
+
+.wiki-renderer a,
+.internal-link {
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.meta-line {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.result-card,
+.file-card,
+.revision-button {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.74);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+  text-align: left;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(93, 122, 138, 0.08);
+}
+
+.result-card span,
+.file-card span {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.result-card:hover,
+.result-card:focus-visible,
+.revision-button:hover,
+.revision-button:focus-visible {
+  background: rgba(250, 158, 188, 0.2);
+  outline: 2px solid rgba(250, 158, 188, 0.32);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.virtual-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+  padding-right: 4px;
+}
+
+.virtual-row {
+  display: grid;
+  align-items: stretch;
+}
+
+.editor-form {
+  display: grid;
+  gap: 16px;
+}
+
+.editor-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.editor-form label > input,
+.search-page-form input,
+.file-form input {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 2px dashed rgba(250, 158, 188, 0.36);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.editor-shell {
+  display: grid;
+  gap: 10px;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.editor-toolbar button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.76);
+  cursor: pointer;
+}
+
+.editor-surface {
+  min-height: 320px;
+  padding: 18px;
+  border: 2px dashed rgba(250, 158, 188, 0.36);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--muted);
+  outline: 0;
+}
+
+.editor-surface:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 4px rgba(250, 158, 188, 0.15);
+}
+
+.editor-hint,
+.editor-loading {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.error-banner {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(180, 35, 74, 0.28);
+  border-radius: 14px;
+  background: rgba(180, 35, 74, 0.1);
+  color: #b4234a;
+  font-weight: 700;
+}
+
+.diff-view {
+  display: grid;
+  gap: 4px;
+  margin-top: 20px;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+.diff-view p {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--muted);
+}
+
+.diff-added {
+  background: rgba(0, 240, 255, 0.16) !important;
+  color: var(--ink) !important;
+}
+
+.diff-removed {
+  background: rgba(250, 158, 188, 0.18) !important;
+  color: #b4234a !important;
+}
+
+.revision-button {
+  border: 0;
+  cursor: pointer;
+}
+
+.file-form {
+  margin: 20px 0;
+}
+
+.file-card {
+  grid-template-columns: 84px minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.file-card img {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.file-card code {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+mark {
+  padding: 0 3px;
+  border-radius: 4px;
+  background: rgba(0, 240, 255, 0.32);
+  color: var(--ink);
+}
+
+:root[data-theme="dark"] .rail-search,
+:root[data-theme="dark"] .token-box,
+:root[data-theme="dark"] .result-card,
+:root[data-theme="dark"] .file-card,
+:root[data-theme="dark"] .revision-button,
+:root[data-theme="dark"] .editor-surface,
+:root[data-theme="dark"] .editor-toolbar button,
+:root[data-theme="dark"] .editor-form label > input,
+:root[data-theme="dark"] .search-page-form input,
+:root[data-theme="dark"] .file-form input {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(23, 17, 42, 0.72);
+}
+
 @media (max-width: 980px) {
   .wiki-shell {
     display: block;
@@ -616,15 +922,7 @@ a {
   }
 
   .section-nav {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 3px;
-  }
-
-  .section-nav a {
-    grid-template-columns: 20px max-content;
-    flex: 0 0 auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .content-grid {
@@ -700,10 +998,6 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .freshness {
-    justify-content: flex-start;
-  }
-
   .section-heading {
     grid-template-columns: 42px 1fr;
   }
@@ -715,5 +1009,25 @@ a {
 
   .note-list {
     display: grid;
+  }
+
+  .page-title-row,
+  .top-strip,
+  .file-card {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .page-actions,
+  .form-grid,
+  .search-page-form,
+  .file-form {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .command-pill,
+  .danger-pill {
+    width: 100%;
   }
 }

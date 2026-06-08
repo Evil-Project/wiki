@@ -10,6 +10,10 @@ export function titleFromSlug(slug: string): string {
   return decodeURIComponent(slug).replace(/_/g, " ");
 }
 
+export function canonicalPageSlug(slug: string): string {
+  return slugifyTitle(titleFromSlug(slug));
+}
+
 export function normalizeList(items: string[]): string[] {
   return Array.from(
     new Set(
