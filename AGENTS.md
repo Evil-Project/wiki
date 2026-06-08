@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This repository is a single-page wiki built with Vite, React, and TypeScript. Application code lives in `src/`: `main.tsx` mounts React, `App.tsx` contains the page structure, and `styles.css` owns global styling. Static assets belong in `public/`, such as `public/wiki-header.png`; they are copied into `dist/` during builds. Cloudflare Workers Static Assets deployment is configured in `wrangler.jsonc`. Do not edit `dist/` directly; regenerate it with the build command.
+This repository is a single-page wiki built with Vite, React, and TypeScript. Application code lives in `src/`: `main.tsx` mounts React, `App.tsx` contains the page structure, and `styles.css` owns global styling. Static assets belong in `public/`, such as `public/neuro-wiki-hero.png`; they are copied into `dist/` during builds. Cloudflare Workers Static Assets deployment is configured in `wrangler.jsonc`. Do not edit `dist/` directly; regenerate it with the build command.
 
 ## Build, Test, and Development Commands
 

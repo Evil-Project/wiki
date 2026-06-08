@@ -7,10 +7,13 @@ import {
   GitBranch,
   Hash,
   Layers3,
+  Moon,
   Search,
   ShieldCheck,
   Sparkles,
+  Sun,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const navItems = [
   { id: "overview", label: "Overview", icon: Compass },
@@ -75,18 +78,52 @@ const glossary = [
 ];
 
 function App() {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof window === "undefined") {
+      return "light";
+    }
+
+    return window.localStorage.getItem("wiki-theme") === "dark" ? "dark" : "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem("wiki-theme", theme);
+  }, [theme]);
+
+  const isDark = theme === "dark";
+
   return (
     <main className="wiki-shell">
+      <div className="bg-effects" aria-hidden="true">
+        <span className="bubble bubble-one"></span>
+        <span className="bubble bubble-two"></span>
+        <span className="bubble bubble-three"></span>
+        <span className="particle particle-one"></span>
+        <span className="particle particle-two"></span>
+      </div>
+
       <aside className="side-rail" aria-label="Wiki navigation">
         <a className="brand-lockup" href="#overview" aria-label="Wiki home">
           <span className="brand-mark">
             <Braces size={19} strokeWidth={2.1} />
           </span>
           <span>
-            <strong>Wiki</strong>
-            <small>Field notes</small>
+            <strong>Neuro Wiki</strong>
+            <small>Brain dump</small>
           </span>
         </a>
+
+        <button
+          className="theme-toggle"
+          type="button"
+          aria-label="Toggle color theme"
+          aria-pressed={isDark}
+          title="Toggle color theme"
+          onClick={() => setTheme(isDark ? "light" : "dark")}
+        >
+          {isDark ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
 
         <nav className="section-nav">
           {navItems.map((item) => {
@@ -105,15 +142,15 @@ function App() {
       <section className="page-column">
         <header className="wiki-hero" id="overview">
           <img
-            src="/wiki-header.png"
-            alt="Illustrated knowledge map with paper notes and archive grid"
+            src="/neuro-wiki-hero.png"
+            alt="Pastel wiki knowledge portal with floating bubbles and archive cards"
           />
           <div className="hero-copy">
             <p className="kicker">Personal Knowledge Base</p>
-            <h1>Workspace Wiki</h1>
+            <h1>Neuro Wiki</h1>
             <p>
-              A quiet, durable page for project context, deployment procedure,
-              and operating notes.
+              A bright encyclopedia shell for field notes, transmissions,
+              categories, and future article history.
             </p>
           </div>
           <div className="hero-meta" aria-label="Wiki metadata">
