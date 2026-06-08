@@ -104,28 +104,30 @@ function Sidebar({ client }: { client: WikiClient | null }) {
 
   return (
     <aside className="side-rail" aria-label="Wiki navigation">
-      <NavLink className="brand-lockup" to="/" aria-label="Wiki home">
-        <span className="brand-mark">
-          <Braces size={19} strokeWidth={2.1} />
-        </span>
-        <span>
-          <strong>Neuro&apos;s Brain Dump</strong>
-          <small>{client?.mode === "api" ? "Workers API" : "IndexedDB"}</small>
-        </span>
-      </NavLink>
+      <header className="rail-header">
+        <NavLink className="brand-lockup" to="/" aria-label="Wiki home">
+          <span className="brand-mark">
+            <Braces size={19} strokeWidth={2.1} />
+          </span>
+          <span>
+            <strong>Neuro&apos;s Brain Dump</strong>
+            <small>{client?.mode === "api" ? "Workers API" : "IndexedDB"}</small>
+          </span>
+        </NavLink>
 
-      <div className="rail-actions">
-        <ThemeButton />
-        <button
-          className="theme-toggle"
-          type="button"
-          aria-label="Open random page"
-          title="Random page"
-          onClick={openRandomPage}
-        >
-          <Dice5 size={18} />
-        </button>
-      </div>
+        <div className="rail-actions">
+          <ThemeButton />
+          <button
+            className="theme-toggle"
+            type="button"
+            aria-label="Open random page"
+            title="Random page"
+            onClick={openRandomPage}
+          >
+            <Dice5 size={18} />
+          </button>
+        </div>
+      </header>
 
       <SearchJump />
 
@@ -167,6 +169,11 @@ function Sidebar({ client }: { client: WikiClient | null }) {
           }}
         />
       </label>
+
+      <footer className="rail-footer">
+        <span className="footer-sticker">Made with heart</span>
+        <span className="footer-sticker footer-sticker-pink">99% AI, 1% Something More</span>
+      </footer>
     </aside>
   );
 }
@@ -184,8 +191,12 @@ function AppRoutes() {
         <span className="bubble bubble-one"></span>
         <span className="bubble bubble-two"></span>
         <span className="bubble bubble-three"></span>
+        <span className="bubble bubble-four"></span>
+        <span className="bubble bubble-five"></span>
+        <span className="bubble bubble-six"></span>
         <span className="particle particle-one"></span>
         <span className="particle particle-two"></span>
+        <span className="particle particle-three"></span>
       </div>
 
       <Sidebar client={client} />

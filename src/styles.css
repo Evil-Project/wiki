@@ -10,6 +10,9 @@
   --cyan: #00f0ff;
   --magenta: #ff00ea;
   --blue: #5d7a8a;
+  --yellow: #ffc800;
+  --green: #00ff80;
+  --hole-spacing: 66px;
   --shadow: 0 18px 42px rgba(93, 122, 138, 0.14);
   font-family: Quicksand, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   background: var(--paper);
@@ -49,6 +52,10 @@ body {
     linear-gradient(90deg, rgba(255, 255, 255, 0.44) 1px, transparent 1px),
     linear-gradient(rgba(255, 255, 255, 0.36) 1px, transparent 1px), var(--paper);
   background-size: auto, auto, 42px 42px, 42px 42px;
+  color: var(--muted);
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
 :root[data-theme="dark"] body {
@@ -75,7 +82,7 @@ button {
 
 .wiki-shell {
   display: grid;
-  grid-template-columns: 256px minmax(0, 1fr);
+  grid-template-columns: 276px minmax(0, 1fr);
   min-height: 100vh;
 }
 
@@ -93,36 +100,62 @@ button {
 }
 
 .bubble {
+  bottom: -120px;
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.54);
   background: rgba(181, 126, 220, 0.15);
   box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.42);
-  animation: bubble-float 16s infinite ease-in-out;
+  opacity: 0.7;
+  animation: bubble-float 18s infinite ease-in;
 }
 
 .bubble-one {
-  width: 120px;
-  height: 120px;
-  left: 6%;
-  top: 18%;
+  width: 80px;
+  height: 80px;
+  left: 10%;
+  animation-duration: 18s;
 }
 
 .bubble-two {
-  width: 78px;
-  height: 78px;
-  right: 14%;
-  top: 12%;
+  width: 50px;
+  height: 50px;
+  left: 25%;
   background: rgba(250, 158, 188, 0.16);
-  animation-delay: -4s;
+  animation-delay: 2s;
+  animation-duration: 14s;
 }
 
 .bubble-three {
-  width: 170px;
-  height: 170px;
-  right: 5%;
-  bottom: 12%;
+  width: 100px;
+  height: 100px;
+  left: 45%;
+  animation-delay: 4s;
+  animation-duration: 20s;
+}
+
+.bubble-four {
+  width: 60px;
+  height: 60px;
+  left: 65%;
   background: rgba(0, 240, 255, 0.1);
-  animation-delay: -9s;
+  animation-delay: 1s;
+  animation-duration: 16s;
+}
+
+.bubble-five {
+  width: 90px;
+  height: 90px;
+  left: 80%;
+  animation-delay: 3s;
+  animation-duration: 19s;
+}
+
+.bubble-six {
+  width: 45px;
+  height: 45px;
+  left: 90%;
+  animation-delay: 5s;
+  animation-duration: 12s;
 }
 
 .particle {
@@ -145,14 +178,26 @@ button {
   animation-delay: -5s;
 }
 
+.particle-three {
+  left: 42%;
+  top: 80%;
+  animation-delay: -8s;
+}
+
 @keyframes bubble-float {
-  0%,
-  100% {
+  0% {
     transform: translateY(0) scale(1);
+    opacity: 0.62;
   }
 
-  50% {
-    transform: translateY(-28px) scale(1.04);
+  70% {
+    transform: translateY(-100vh) scale(1.1);
+    opacity: 0.25;
+  }
+
+  100% {
+    transform: translateY(-140vh) scale(1.1);
+    opacity: 0;
   }
 }
 
@@ -175,17 +220,25 @@ button {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 18px;
   height: 100vh;
-  padding: 28px 18px;
-  border-right: 3px solid rgba(250, 158, 188, 0.38);
+  padding: 20px 18px;
+  border-right: 0;
+  border-bottom: 3px solid rgba(250, 158, 188, 0.4);
   background: rgba(248, 243, 234, 0.8);
   backdrop-filter: blur(9px);
+  box-shadow: 12px 0 26px rgba(93, 122, 138, 0.08);
 }
 
 :root[data-theme="dark"] .side-rail {
   background: rgba(9, 7, 19, 0.76);
-  border-right-color: rgba(0, 240, 255, 0.24);
+  border-bottom-color: rgba(0, 240, 255, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28), 0 0 28px rgba(181, 126, 220, 0.12);
+}
+
+.rail-header {
+  display: grid;
+  gap: 14px;
 }
 
 .brand-lockup {
@@ -207,12 +260,19 @@ button {
   color: #fff;
   box-shadow: 0 6px 14px rgba(250, 158, 188, 0.34);
   transform: rotate(-5deg);
+  transition: transform 0.25s ease;
+}
+
+.brand-lockup:hover .brand-mark,
+.brand-lockup:focus-visible .brand-mark {
+  transform: rotate(8deg) scale(1.08);
 }
 
 .brand-lockup strong {
   display: block;
   font-size: 1.2rem;
   line-height: 1;
+  color: var(--ink);
   text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.72);
 }
 
@@ -234,6 +294,7 @@ button {
   color: var(--ink);
   box-shadow: 5px 5px 10px rgba(93, 122, 138, 0.14), -5px -5px 10px rgba(255, 255, 255, 0.82);
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .theme-toggle:hover,
@@ -241,6 +302,7 @@ button {
   background: linear-gradient(135deg, #ffffff 0%, var(--pink) 100%);
   outline: 2px solid rgba(250, 158, 188, 0.35);
   outline-offset: 3px;
+  transform: scale(1.05);
 }
 
 .rail-actions {
@@ -262,6 +324,7 @@ button {
   border: 2px dashed rgba(250, 158, 188, 0.36);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 4px 12px rgba(93, 122, 138, 0.08);
 }
 
 .rail-search input,
@@ -314,33 +377,83 @@ button {
   border-radius: 999px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(224, 229, 236, 0.66));
   color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
   text-decoration: none;
+  text-transform: uppercase;
   box-shadow: 4px 4px 10px rgba(93, 122, 138, 0.1);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .section-nav a:hover,
-.section-nav a:focus-visible {
+.section-nav a:focus-visible,
+.section-nav a.active {
   background: linear-gradient(135deg, #ffffff 0%, var(--pink) 100%);
   outline: 2px solid rgba(250, 158, 188, 0.3);
   outline-offset: 3px;
+  transform: translateY(-1px);
+}
+
+.rail-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 2px dotted rgba(250, 158, 188, 0.5);
+}
+
+.footer-sticker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 9px;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  background: var(--lilac);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.2;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+  transform: rotate(-2deg);
+}
+
+.footer-sticker-pink {
+  background: var(--pink);
+  transform: rotate(2deg);
 }
 
 .page-column {
   position: relative;
   z-index: 1;
   min-width: 0;
-  padding: 28px clamp(18px, 4vw, 56px) 56px;
+  max-width: 1440px;
+  padding: 30px clamp(18px, 4vw, 56px) 56px;
 }
 
 .wiki-hero {
   position: relative;
   display: grid;
-  min-height: min(520px, 64vh);
+  min-height: min(420px, 58vh);
   overflow: hidden;
   border: 3px solid rgba(250, 158, 188, 0.42);
   border-radius: 16px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 240, 245, 0.62));
   box-shadow: var(--shadow);
+}
+
+.wiki-hero::before {
+  position: absolute;
+  top: -12px;
+  right: 40px;
+  z-index: 2;
+  width: 96px;
+  height: 28px;
+  content: "";
+  background: rgba(250, 158, 188, 0.42);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  transform: rotate(4deg);
 }
 
 :root[data-theme="dark"] .wiki-hero {
@@ -351,10 +464,12 @@ button {
 
 .wiki-hero img {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  right: 0;
+  width: min(68%, 960px);
   height: 100%;
   object-fit: cover;
+  object-position: right center;
 }
 
 .wiki-hero::after {
@@ -362,7 +477,7 @@ button {
   inset: 0;
   content: "";
   background:
-    linear-gradient(90deg, rgba(248, 243, 234, 0.96) 0%, rgba(248, 243, 234, 0.72) 36%, rgba(248, 243, 234, 0.16) 72%),
+    linear-gradient(90deg, rgba(248, 243, 234, 0.98) 0%, rgba(248, 243, 234, 0.84) 42%, rgba(248, 243, 234, 0.16) 82%),
     linear-gradient(0deg, rgba(58, 12, 163, 0.08), transparent 52%);
 }
 
@@ -375,10 +490,10 @@ button {
 .hero-copy {
   position: relative;
   z-index: 1;
-  align-self: end;
+  align-self: center;
   min-width: 0;
-  max-width: 720px;
-  padding: clamp(28px, 6vw, 72px);
+  max-width: 680px;
+  padding: clamp(24px, 5vw, 54px);
   color: var(--ink);
 }
 
@@ -395,14 +510,15 @@ button {
   text-transform: uppercase;
   letter-spacing: 0;
   transform: rotate(-1.5deg);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
 .hero-copy h1 {
-  max-width: 10ch;
+  max-width: 12ch;
   margin: 0;
-  font-size: clamp(4.2rem, 9vw, 8.5rem);
+  font-size: clamp(3rem, 6.8vw, 6.25rem);
   font-weight: 700;
-  line-height: 0.9;
+  line-height: 0.96;
   letter-spacing: 0;
   text-shadow: 4px 4px 0 rgba(255, 255, 255, 0.86);
 }
@@ -414,10 +530,10 @@ button {
 }
 
 .hero-copy p:last-child {
-  max-width: 590px;
-  margin: 24px 0 0;
+  max-width: 62ch;
+  margin: 18px 0 0;
   color: var(--muted);
-  font-size: clamp(1.03rem, 1.6vw, 1.25rem);
+  font-size: clamp(1rem, 1.3vw, 1.12rem);
   font-weight: 600;
   line-height: 1.65;
 }
@@ -447,11 +563,13 @@ button {
 }
 
 .top-strip {
-  display: grid;
-  grid-template-columns: minmax(220px, 1fr) auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   align-items: center;
-  margin: 22px 0;
+  margin: 22px 0 34px;
+  padding-bottom: 14px;
+  border-bottom: 2px dotted rgba(250, 158, 188, 0.5);
 }
 
 .command-pill,
@@ -468,9 +586,12 @@ button {
   background: linear-gradient(135deg, #ffffff 0%, #e0e5ec 100%);
   color: var(--ink);
   font-weight: 700;
+  font-size: 0.9rem;
   text-decoration: none;
+  text-transform: uppercase;
   box-shadow: 4px 4px 10px rgba(93, 122, 138, 0.1);
   cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .command-pill:hover,
@@ -480,6 +601,7 @@ button {
   background: linear-gradient(135deg, #ffffff 0%, var(--pink) 100%);
   outline: 2px solid rgba(250, 158, 188, 0.3);
   outline-offset: 3px;
+  transform: scale(1.03);
 }
 
 .danger-pill {
@@ -495,17 +617,49 @@ button {
 
 .article-stack {
   display: grid;
-  gap: 16px;
+  gap: 30px;
 }
 
 .wiki-section {
   scroll-margin-top: 24px;
-  padding: clamp(20px, 3vw, 32px);
+  position: relative;
+  padding: clamp(22px, 3vw, 34px) clamp(20px, 3vw, 32px) clamp(22px, 3vw, 34px) clamp(44px, 4vw, 58px);
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 16px;
   background: var(--sheet);
   box-shadow: var(--shadow);
   backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.wiki-section::before,
+.result-card::before,
+.file-card::before,
+.revision-button::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 18px;
+  content: "";
+  background-image: radial-gradient(circle, rgba(93, 122, 138, 0.28) 0 7px, transparent 8px);
+  background-position: center 18px;
+  background-repeat: repeat-y;
+  background-size: 18px var(--hole-spacing);
+  pointer-events: none;
+}
+
+.wiki-section::after,
+.context-panel section::after {
+  position: absolute;
+  top: -12px;
+  right: 24px;
+  width: 90px;
+  height: 28px;
+  content: "";
+  background: rgba(250, 158, 188, 0.38);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  transform: rotate(4deg);
 }
 
 .section-heading {
@@ -513,6 +667,7 @@ button {
   grid-template-columns: 48px 1fr;
   gap: 14px;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .section-icon {
@@ -541,6 +696,10 @@ button {
   font-size: clamp(1.8rem, 3vw, 3rem);
   line-height: 1.05;
   text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.75);
+}
+
+.section-heading h1 {
+  margin: 0;
 }
 
 .section-body {
@@ -579,6 +738,7 @@ button {
 }
 
 .context-panel section {
+  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.78);
   border-radius: 16px;
   background: var(--sheet);
@@ -590,7 +750,9 @@ button {
   margin: 0;
   padding: 16px 18px;
   border-bottom: 1px solid var(--edge);
+  color: var(--ink);
   font-size: 1.25rem;
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.72);
 }
 
 .context-panel ol {
@@ -713,11 +875,12 @@ button {
 .result-card,
 .file-card,
 .revision-button {
+  position: relative;
   display: grid;
   gap: 5px;
   width: 100%;
   min-width: 0;
-  padding: 14px;
+  padding: 14px 14px 14px 42px;
   border: 1px solid rgba(255, 255, 255, 0.74);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.55);
@@ -725,6 +888,21 @@ button {
   text-align: left;
   text-decoration: none;
   box-shadow: 0 8px 18px rgba(93, 122, 138, 0.08);
+  transition: background 0.2s ease, filter 0.2s ease, transform 0.2s ease;
+}
+
+.result-card::after,
+.file-card::after,
+.revision-button::after {
+  position: absolute;
+  top: -8px;
+  right: 18px;
+  width: 70px;
+  height: 20px;
+  content: "";
+  background: rgba(181, 126, 220, 0.34);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.08);
+  transform: rotate(-3deg);
 }
 
 .result-card span,
@@ -738,7 +916,9 @@ button {
 .revision-button:hover,
 .revision-button:focus-visible {
   background: rgba(250, 158, 188, 0.2);
+  filter: drop-shadow(0 8px 16px rgba(93, 122, 138, 0.12));
   outline: 2px solid rgba(250, 158, 188, 0.32);
+  transform: translateY(-2px);
 }
 
 .category-grid {
@@ -908,6 +1088,42 @@ mark {
   background: rgba(23, 17, 42, 0.72);
 }
 
+:root[data-theme="dark"] .wiki-section::before,
+:root[data-theme="dark"] .result-card::before,
+:root[data-theme="dark"] .file-card::before,
+:root[data-theme="dark"] .revision-button::before {
+  background-image: radial-gradient(circle, rgba(69, 246, 255, 0.22) 0 7px, transparent 8px);
+}
+
+:root[data-theme="dark"] .wiki-hero::before,
+:root[data-theme="dark"] .wiki-section::after,
+:root[data-theme="dark"] .context-panel section::after,
+:root[data-theme="dark"] .result-card::after,
+:root[data-theme="dark"] .file-card::after,
+:root[data-theme="dark"] .revision-button::after {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(90deg, rgba(255, 159, 196, 0.28), rgba(69, 246, 255, 0.22));
+  box-shadow: 0 0 18px rgba(250, 158, 188, 0.18);
+}
+
+:root[data-theme="dark"] .footer-sticker {
+  border-color: rgba(255, 255, 255, 0.75);
+  background: var(--lilac);
+  color: #11051a;
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.22), 2px 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .footer-sticker-pink {
+  background: var(--pink);
+  color: #160715;
+}
+
+:root[data-theme="dark"] .context-panel h2,
+:root[data-theme="dark"] .page-title-row h1,
+:root[data-theme="dark"] .wiki-section h1 {
+  text-shadow: 0 0 18px rgba(255, 159, 196, 0.32);
+}
+
 @media (max-width: 980px) {
   .wiki-shell {
     display: block;
@@ -963,8 +1179,16 @@ mark {
     min-height: 480px;
   }
 
+  .wiki-hero img {
+    width: 100%;
+  }
+
   .wiki-hero::after {
     background: linear-gradient(0deg, rgba(248, 243, 234, 0.9), rgba(248, 243, 234, 0.38));
+  }
+
+  :root[data-theme="dark"] .wiki-hero::after {
+    background: linear-gradient(0deg, rgba(9, 7, 19, 0.9), rgba(9, 7, 19, 0.38));
   }
 
   .hero-copy {
@@ -974,9 +1198,10 @@ mark {
   }
 
   .hero-copy h1 {
-    max-width: 100%;
-    font-size: clamp(2.7rem, 12vw, 3.5rem);
+    max-width: min(8ch, 100%);
+    font-size: clamp(2.45rem, 10vw, 3rem);
     line-height: 0.96;
+    overflow-wrap: break-word;
   }
 
   .hero-copy p:last-child {

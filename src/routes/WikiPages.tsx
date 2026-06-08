@@ -88,11 +88,11 @@ function HeroCard({ pages, revisions, loading }: { pages: WikiPage[]; revisions:
         alt="Pastel wiki knowledge portal with floating bubbles and archive cards"
       />
       <div className="hero-copy">
-        <p className="kicker">Status: Encyclopedic</p>
+        <p className="kicker">Status: suspiciously organized</p>
         <h1>Neuro&apos;s Brain Dump</h1>
         <p>
-          A MediaWiki-style archive for transmissions, editable pages, revision history,
-          categories, search, backlinks, and local-first storage.
+          An editable archive for stray thoughts, transmissions, revision trails,
+          categories, search, backlinks, and files that probably should have been labeled.
         </p>
       </div>
       <div className="hero-meta" aria-label="Wiki metadata">
